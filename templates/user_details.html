@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h1>Welcome to {{ user.user_name }}'s dating log </h1>
+
+
+<!-- create new log section -->
+<div>
+    <form action="/new_dating_log">
+        <button type="submit"> Create a new dating log </button>
+    </form>
+</div>
+
+<!-- filter historial logs by ratings -->
+<p>
+    <h2>Dating log library sorting </h2>
+    <form action= "/user/sorting/{{ user.email }}/api" method ="post">
+        <p>
+            <label for="sorting_object">Sort by:</label>
+            <select name="sorting_object" id="sorting_object">
+                <option value="overall_rating">Rating score</option>
+                <option value="date_of_the_date">Date</option>
+                <option value="first_name_dated">First name</option>
+            </select>
+        </p>
+        <p>
+            <label for="sorting_rule">sorting rule:</label>
+            <select name="sorting_rule" id="sorting_rule">
+                <option value="High_to_low">High to low</option>
+                <option value="Low_to_high">Low to High</option>
+            </select>
+        </p>
+        <input type="submit" value="Sort" id="sort">
+    </form>
+</p>
+
+
+<!-- showcase all the history logs -->
+<p>
+<h2>{{ user.user_name }}'s dating log library </h2>
+
+{% for log in list_of_log_objects  %}
+<p>
+    <div> 
+        <a href="/user/logs/{{ log.log_id }}">
+            {{ log.log_id }}
+        </a> 
+    </div>
+    <div> Name: {{ log.first_name_dated}} {{ log.last_name_dated}} </div>
+    <div> Overall rating: {{ log.overall_rating}} </div>
+    <div> Picture: <img src="{{ log.picture}}"> </div>
+</p>
+{% endfor %}
+
+</p>
+
+<!-- React for sorting interaction-->
+<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
+
+<script type="text/jsx" src="/static/sort.jsx"></script>
+
+{% endblock %}

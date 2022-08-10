@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<!-- show the detail -->
+
+<div>
+    <h2>My date with {{ log_object.first_name_dated }} {{ log_object.last_name_dated }} </h2>
+</div>
+<div>
+    <h3> Overall rating: {{ log_object.overall_rating }} </h3>
+</div>
+
+<div> Picture: <img src="{{ log_object.picture}}"> </div>
+<div> Date: {{ log_object.date_of_the_date }} </div>
+<div> City: {{ log_object.city_met }} </div>
+<div> Where we met: {{ log_object.app_met }} </div>
+<div> Key takeaway: {{ log_object.key_takeaway }} </div>
+<div> Details: {{ log_object.description }} </div>
+
+<p>
+    <form action="/user/{{ log_object.user_ref.email }}">
+        <input type="submit" value="Go back to my detail page">
+    </form>
+    <form action="/user/logs/delete/{{ log_object.log_id}}">
+        <input type="submit" value="Delete this log">
+    </form>
+</p>
+
+
+<!-- can add the edit funtions in later version  -->
+{% endblock %}
+
+
+
+<!-- https://getbootstrap.com/docs/5.0/content/typography/ -->

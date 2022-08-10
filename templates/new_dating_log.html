@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h1>Tell us what's new in your date!</h1>
+
+<!-- list of info -->
+<form action="/date_info" method="POST" enctype="multipart/form-data">
+    <h2> Your date info </h2>
+        <p> * is mandatory input</p>
+        <p>
+            First name* <input type="text" name="first_name_dated">
+        </p>
+        <p>
+            Last name <input type="text" name="last_name_dated">
+        </p>
+        <p>
+            Dating date <input type="datetime-local" name="date_of_the_date">
+        </p>
+        <p>
+            City you met <input type="text" name="city_met">
+        </p>
+        <p>
+            App you met <input type="text" name="app_met">
+        </p>
+<!-- contact info -->
+        <p>
+            Contact info <input type="text" name="contact_info">
+        </p>
+
+    <h2> Tell us your experience </h2>
+        <p>
+            <label for="rating">How would you rate the date*:</label>
+            <select name="overall_rating" id="rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </p>
+        <p>
+            key takeaway <input type="text" name="key_takeaway">
+        </p>
+        <p>
+            <label for="details">Details:</label>
+            <textarea id="details" name="description" rows="4" cols="50"></textarea>
+        </p>
+
+<!-- upload image -->
+        <p>
+           Upload picture*
+            <input type="file" name="picture"> 
+        </p>
+
+<p>
+    <input type="submit" value="Submit">
+</p>
+
+</form>
+
+
+
+{% endblock %}

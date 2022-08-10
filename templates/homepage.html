@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container-fluid">
+  <h1>Welcome to Romance Diary </h1>
+
+  <img src="/static/Homescreen.png" class="img-fluid">
+
+  <div class = "row">
+    
+    <div class = "col mb-3">
+    <!-- create an account -->
+    <h4>Create an Account</h4>
+      <form action="/user" method="POST">
+        <p>
+          <label for="formGroupExampleInput" class="form-label">User name</label>
+          <input type="text" name="user_name" class="form-control" id="formGroupExampleInput">
+        </p>
+        
+        <p>
+          <label for="formGroupExampleInput" class="form-label">Email</label>
+          <input type="text" name="email" class="form-control" id="formGroupExampleInput">
+        </p>
+
+        <p>
+          <label for="formGroupExampleInput" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="formGroupExampleInput">
+        </p>
+
+        <p>
+          <input type="submit" value="Create the account" class="btn btn-light">
+        </p>
+      </form>
+    </div>
+
+
+
+    <div class = "col mb-3">
+      <!-- log in -->
+        <h4>Log In</h4>
+        <form action="/login" method="POST">
+          <p>
+            <label for="formGroupExampleInput" class="form-label">Email</label>
+            <input type="text" name="email" class="form-control" id="formGroupExampleInput">
+          </p>
+
+          <p>
+            <label for="formGroupExampleInput" class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" id="formGroupExampleInput">
+          </p>
+
+          <p>
+            <input type="submit" value="Log in" class="btn btn-light">
+          </p>
+        </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
