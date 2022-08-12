@@ -101,13 +101,15 @@ def show_user_logs(user_email):
     return render_template("user_details.html", user = user, list_of_log_objects = list_of_log_objects)
 
 # api here
-@app.route("/user/sorting/<user_email>/api", methods = ["POST"] )
-def get_user_logs_in_api(user_email):
+@app.route("/user/sorting/user_email/api", methods = ["POST"] )
+def get_user_logs_in_api():
     """fetch the sorting info and pass it throgh api so that sort.jsx can take it"""
 
-    # sorting_object = request.json.get("sorting_object")
-    # sorting_rule = request.json.get("sorting_rule")
+    sorting_object = request.json.get("sorting_object")
+    sorting_rule = request.json.get("sorting_rule")
 
+    user_email = session.get("user_email")
+    
     user = crud.get_user_by_email(user_email)
     list_of_log_objects = crud.get_user_logs_by_user_id(user.user_id)
 
@@ -118,12 +120,14 @@ def get_user_logs_in_api(user_email):
         sorted_list_objects = sorted(list_of_log_objects, key=attrgetter(sorting_object), reverse= False)
         
     logs_dictionary = {}
-
+    order_number = 0
     for list_obj in sorted_list_objects:
-        logs_dictionary[list_obj.log_id] = {}
-        logs_dictionary[list_obj.log_id]["name"] = list_obj.first_name_dated + " "+ list_obj.last_name_dated
-        logs_dictionary[list_obj.log_id]["overall_rating"] = list_obj.overall_rating
-        logs_dictionary[list_obj.log_id]["picture"] = list_obj.picture
+        logs_dictionary[order_number] = {}
+        logs_dictionary[order_number]["log_id"] = list_obj.log_id
+        logs_dictionary[order_number]["name"] = list_obj.first_name_dated + " "+ list_obj.last_name_dated
+        logs_dictionary[order_number]["overall_rating"] = list_obj.overall_rating
+        logs_dictionary[order_number]["picture"] = list_obj.picture
+        order_number += 1
 
     return jsonify(logs_dictionary)
 

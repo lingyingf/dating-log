@@ -40,19 +40,22 @@
 <p>
 <h2>{{ user.user_name }}'s dating log library </h2>
 
+<div id="historical_logs">
+<div id="historical_logs_clean_after_sorting">
 {% for log in list_of_log_objects  %}
-<p>
-    <div> 
-        <a href="/user/logs/{{ log.log_id }}">
-            {{ log.log_id }}
-        </a> 
-    </div>
-    <div> Name: {{ log.first_name_dated}} {{ log.last_name_dated}} </div>
-    <div> Overall rating: {{ log.overall_rating}} </div>
-    <div> Picture: <img src="{{ log.picture}}"> </div>
-</p>
-{% endfor %}
-
+    <p>
+        <div> 
+            <a href="/user/logs/{{ log.log_id }}">
+                {{ log.log_id }}
+            </a> 
+        </div>
+        <div> Name: {{ log.first_name_dated}} {{ log.last_name_dated}} </div>
+        <div> Overall rating: {{ log.overall_rating}} </div>
+        <div> Picture: <img src="{{ log.picture}}"> </div>
+    </p>
+    {% endfor %}
+</div>
+</div>
 </p>
 
 <!-- React for sorting interaction-->
