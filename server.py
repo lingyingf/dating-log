@@ -7,7 +7,7 @@ from model import connect_to_db, db, User, Log
 import crud
 import cloudinary.uploader
 import os
-from operator import itemgetter, attrgetter
+from operator import countOf, itemgetter, attrgetter
 
 from jinja2 import StrictUndefined
 
@@ -193,6 +193,68 @@ def delete_current_log(log_id):
     user_email = session["user_email"]
     
     return redirect(f'/user/{user_email}')
+
+
+@app.route("/user/<user_email>/analysis")
+def analysis_board(user_email):
+
+    user_object = crud.get_user_by_email(user_email)
+
+    return render_template ("analysis_board.html",user = user_object)
+
+
+@app.route("/dating_analysis_app.json")
+def get_data_analysis_by_app():
+    """get user data for analysis"""
+
+    user_email = session["user_email"]
+    user = crud.get_user_by_email(user_email)
+
+    list_of_log_objects_under_this_user = crud.get_user_logs_by_user_id(user.user_id)
+    list_of_log_objects_under_other_users = Log.query.filter(Log.user_id != user.user_id).all() 
+
+    # get a list of apps created
+
+    set_of_apps = set(db.session.query(Log.app_met).filter(Log.user_id == user.user_id).all())
+    # [('aa',), ('b',), ('Tinder',)]
+
+    list_of_app = []
+    for tuple in set_of_apps:
+        for a in tuple:
+            list_of_app.append(a)  
+    # ['Tinder', 'b', 'aa']
+
+    # loop through the list of logs [t,5],[t,3][H,3]
+
+    log_by_app_summary = {}
+
+    for app in list_of_app:
+        count_this_user = 0
+        rating_sum_this_user = 0
+
+        count_other_users = 0
+        rating_sum_other_users = 0
+
+        log_by_app_summary[app] = {}
+
+        for log_object_this_user in list_of_log_objects_under_this_user:
+            if app == log_object_this_user.app_met:
+                count_this_user += 1
+                rating_sum_this_user += log_object_this_user.overall_rating
+
+        for log_object_other_users in list_of_log_objects_under_other_users:
+            if app == log_object_other_users.app_met:
+                count_other_users += 1
+                rating_sum_other_users += log_object_other_users.overall_rating
+                
+        log_by_app_summary[app]["my_rating"] = (rating_sum_this_user / count_this_user)
+
+        if count_other_users == 0:
+            log_by_app_summary[app]["other_ppl_rating"] = 0
+        else:
+            log_by_app_summary[app]["other_ppl_rating"] = (rating_sum_other_users / count_other_users)
+    
+    return jsonify({"data": log_by_app_summary})                
 
 
 if __name__ == "__main__":

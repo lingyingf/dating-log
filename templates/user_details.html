@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<!-- top bar  -->
+<div> 
+    <a href="/user/{{user.email}}/analysis">
+        Analysis
+    </a> 
+</div>
+
 
 <h1>Welcome to {{ user.user_name }}'s dating log </h1>
 
@@ -15,7 +22,7 @@
 <!-- filter historial logs by ratings -->
 <p>
     <h2>Dating log library sorting </h2>
-    <form action= "/user/sorting/{{ user.email }}/api" method ="post">
+    <form action= "/user/sorting/user_email/api" method ="post">
         <p>
             <label for="sorting_object">Sort by:</label>
             <select name="sorting_object" id="sorting_object">
@@ -25,7 +32,7 @@
             </select>
         </p>
         <p>
-            <label for="sorting_rule">sorting rule:</label>
+            <label for="sorting_rule">Sorting rule:</label>
             <select name="sorting_rule" id="sorting_rule">
                 <option value="High_to_low">High to low</option>
                 <option value="Low_to_high">Low to High</option>
@@ -58,11 +65,8 @@
 </div>
 </p>
 
-<!-- React for sorting interaction-->
-<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.js"></script>
 
-<script type="text/jsx" src="/static/sort.jsx"></script>
+
+<script src="/static/sort.js"></script>
 
 {% endblock %}
