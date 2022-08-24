@@ -2,12 +2,14 @@
 
 from crypt import methods
 import email
+import json
 from flask import (Flask, jsonify, render_template, request, flash, session, redirect)
 from model import connect_to_db, db, User, Log
 import crud
 import cloudinary.uploader
 import os
 from operator import countOf, itemgetter, attrgetter
+import random
 
 from jinja2 import StrictUndefined
 
@@ -100,7 +102,7 @@ def show_user_logs(user_email):
 
     return render_template("user_details.html", user = user, list_of_log_objects = list_of_log_objects)
 
-# api here
+# sort api here
 @app.route("/user/sorting/user_email/api", methods = ["POST"] )
 def get_user_logs_in_api():
     """fetch the sorting info and pass it throgh api so that sort.jsx can take it"""
@@ -255,6 +257,99 @@ def get_data_analysis_by_app():
             log_by_app_summary[app]["other_ppl_rating"] = (rating_sum_other_users / count_other_users)
     
     return jsonify({"data": log_by_app_summary})                
+
+
+
+@app.route("/dating_analysis_region.json")
+def get_data_analysis_by_region():
+    """get user data for analysis for region"""
+
+    user_email = session["user_email"]
+    user = crud.get_user_by_email(user_email)
+
+    list_of_log_objects_under_this_user = crud.get_user_logs_by_user_id(user.user_id)
+    list_of_log_objects_under_other_users = Log.query.filter(Log.user_id != user.user_id).all() 
+
+    # get a list of regions created
+    set_of_regions = set(db.session.query(Log.city_met).filter(Log.user_id == user.user_id).all())
+    # [('aa',), ('b',), ('Tinder',)]
+
+    list_of_region = []
+    for tuple in set_of_regions:
+        for a in tuple:
+            list_of_region.append(a)  
+
+    # ['LA', 'b', 'aa']
+
+    # loop through the list of logs [t,5],[t,3][H,3]
+
+    log_by_region_summary = {}
+
+    for region in list_of_region:
+            count_this_user = 0
+            rating_sum_this_user = 0
+
+            count_other_users = 0
+            rating_sum_other_users = 0
+
+            log_by_region_summary[region] = {}
+
+            for log_object_this_user in list_of_log_objects_under_this_user:
+                if region == log_object_this_user.city_met:
+                    count_this_user += 1
+                    rating_sum_this_user += log_object_this_user.overall_rating
+
+            for log_object_other_users in list_of_log_objects_under_other_users:
+                if region == log_object_other_users.city_met:
+                    count_other_users += 1
+                    rating_sum_other_users += log_object_other_users.overall_rating
+                    
+            log_by_region_summary[region]["my_rating"] = (rating_sum_this_user / count_this_user)
+
+            if count_other_users == 0:
+                log_by_region_summary[region]["other_ppl_rating"] = 0
+            else:
+                log_by_region_summary[region]["other_ppl_rating"] = (rating_sum_other_users / count_other_users)
+        
+    return jsonify({"data": log_by_region_summary})
+
+    
+@app.route("/user/<user_email>/fortune_telling")
+def get_fortune_telling(user_email):
+    """ Forturn telling landing page """
+    
+    user = crud.get_user_by_email(user_email)
+    
+    return render_template("fortune_telling.html", user = user)
+
+
+
+@app.route("/user/<user_email>/fortune_telling/answer/api", methods = ["POST"])
+def render_answer(user_email):
+    """ get answer for fortune telling"""
+
+    question = request.json.get("question")
+
+    answer_of_when_meet = [
+        "0-1 year, don't worry! the right one is around the corner",
+        "2-3 year, everything will be fine",
+        "3-5 year, the right one is worth the wait",
+        "> 5 year, focus on yourself and love yourself first"
+    ]
+
+    if question == "when_meet":
+        index = random.randint(0,len(answer_of_when_meet)-1)
+        answer = answer_of_when_meet[index]
+    
+    print(question)
+
+    return jsonify({"data": answer})
+         
+
+
+
+
+
 
 
 if __name__ == "__main__":
