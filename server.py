@@ -349,9 +349,6 @@ def render_answer(user_email):
 
 
 
-
-
-
 if __name__ == "__main__":
     # DebugToolbarExtension(app)
     connect_to_db(app)
