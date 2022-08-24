@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+<!-- top bar  -->
+<div> 
+    <a href="/user/{{user.email}}">
+        Dating log
+    </a> 
+</div>
+<div> 
+    <a href="/user/{{user.email}}/analysis">
+        Analysis
+    </a> 
+</div>
+
+<h1>Welcome to {{ user.user_name }}'s fortune telling </h1>
+
+<!-- list of the topics -->
+
+
+<p>
+<h2>Step 1: select a topic</h2>
+
+<form action="/user/{{user.email}}/fortune_telling/answer/api" method="post">
+  
+    <label for="question"> Choose a question:</label>
+    <select id="question" name="question">
+        <option value="when_meet">When will I meet the right person? </option>
+        <option value="fit">Is this person a good fit?</option>
+        <option value="like_me">Does this person like me?</option>
+        <option value="call_me">Will the person call me again?</option>
+        <option value="get_back">Will we get back together?</option>
+    </select>
+</p>
+
+
+<p>
+<h2>Step 2: submit your question</h2>
+    
+<h10>Please elaborate your questions in the mind. If your question is related to specific person, 
+    please make sure you specify his/her/their name. </h10>
+    
+    <p>
+        <input type="submit" id="question_submit">
+    </p> 
+
+</form>
+</p>
+
+
+<p>
+<h2>Step 3: see your fortune</h2>
+
+
+</p>
+
+
+
+
+<script src="/static/question_answer.js"></script>
+
+
+{% endblock %}

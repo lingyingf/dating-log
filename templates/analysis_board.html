@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+<!-- top bar  -->
+<div> 
+    <a href="/user/{{user.email}}">
+        Dating log
+    </a> 
+</div>
+<div> 
+  <a href="/user/{{user.email}}/fortune_telling">
+      Fortune Telling
+  </a> 
+</div>
+
+
+<h1>Welcome to {{ user.user_name }}'s dating analysis board </h1>
+
+<!-- chart 1 by app -->
+<div>
+  <h2> chart by app </h2>
+  <canvas id="chart_by_app"></canvas>
+
+</div>
+
+<!-- chart 2 by region -->
+<div>
+  <h2> chart by region </h2>
+  <canvas id="chart_by_region"></canvas>
+
+</div>
+
+
+
+
+
+
+
+<!-- js -->
+
+<script src="/static/analysis_chart.js"></script>
+
+{% endblock %}
