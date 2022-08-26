@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+<!-- top bar  -->
+<div> 
+    <a href="/user/{{user.email}}">
+        Dating log
+    </a> 
+
+    <a href="/user/{{user.email}}/analysis">
+        Analysis
+    </a> 
+
+    <a href="/user/{{user.email}}/fortune_telling">
+        Fortune telling
+    </a> 
+
+    <a href="/user/{{user.email}}/discussion_forum">
+        Discussion forum
+    </a> 
+</div>
+
+<h1>Welcome to {{ user.user_name }}'s discussion forum </h1>
+
+<!-- friend list -->
+<div>
+    <form action="/user/{{user.email}}/friend_list_landing_page">
+        <button type="submit"> Manage friend list </button>
+    </form>
+</div>
+
+
+<!-- list of the topics -->
+
+
+
+
+
+{% endblock %}
