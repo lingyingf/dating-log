@@ -1,6 +1,7 @@
 """Server for dating log app."""
 
 from crypt import methods
+from ctypes import create_unicode_buffer
 import email
 import json
 from flask import (Flask, jsonify, render_template, request, flash, session, redirect)
@@ -323,9 +324,9 @@ def get_fortune_telling(user_email):
     return render_template("fortune_telling.html", user = user)
 
 
-
-@app.route("/user/<user_email>/fortune_telling/answer/api", methods = ["POST"])
-def render_answer(user_email):
+# api
+@app.route("/user/fortune_telling/answer/api", methods = ["POST"])
+def render_answer():
     """ get answer for fortune telling"""
 
     question = request.json.get("question")
@@ -341,11 +342,53 @@ def render_answer(user_email):
         index = random.randint(0,len(answer_of_when_meet)-1)
         answer = answer_of_when_meet[index]
     
-    print(question)
+    answer_of_fit = [
+        "Yes! That person is a right fit. Trust your gut and go for it!!",
+        "Sorry but no. Move on and next one will be better"
+    ]
+
+    if question == "fit":
+        index = random.randint(0,len(answer_of_fit)-1)
+        answer = answer_of_fit[index]
+    
+    answer_of_like_me = [
+        "Yes! That person is crazy for you but doesn't know how to express the feeling. Maybe it's time to sit down and have the conversation.",
+        "Sorry but no. Move on and next one will be better"
+    ]
+
+    if question == "like_me":
+        index = random.randint(0,len(answer_of_like_me)-1)
+        answer = answer_of_like_me[index]
+    
+    answer_of_call_me = [
+        "Yes! That person misses you but is still caught up by other stuffs. Maybe it's time to give the other person some space. Things will get better, I promise.",
+        "Sorry but no. Move on and next one will be better"
+    ]
+
+    if question == "call_me" or question == "get_back":
+        index = random.randint(0,len(answer_of_call_me)-1)
+        answer = answer_of_call_me[index]
 
     return jsonify({"data": answer})
-         
 
+
+
+@app.route("/user/<user_email>/discussion_forum")
+def show_landing_page_discussion_forum(user_email):
+    """render discussion landing page"""
+
+    user = crud.get_user_by_email(user_email)
+
+    return render_template("landing_page_discussion_forum.html", user = user)
+
+         
+@app.route("/user/<user_email>/friend_list_landing_page")
+def show_friend_list(user_email):
+    """show friend list"""
+
+    user = crud.get_user_by_email(user_email)
+
+    return render_template("friend_list_landing_page.html", user = user)
 
 
 

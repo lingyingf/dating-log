@@ -1,4 +1,4 @@
-'use strick';
+'use strict';
 
 document.querySelector('#sort').addEventListener("click", (evt) => {
     evt.preventDefault();

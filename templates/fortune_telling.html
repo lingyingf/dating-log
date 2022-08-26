@@ -10,10 +10,17 @@
     <a href="/user/{{user.email}}">
         Dating log
     </a> 
-</div>
-<div> 
+
     <a href="/user/{{user.email}}/analysis">
         Analysis
+    </a> 
+
+    <a href="/user/{{user.email}}/fortune_telling">
+        Fortune telling
+    </a> 
+
+    <a href="/user/{{user.email}}/discussion_forum">
+        Discussion forum
     </a> 
 </div>
 
@@ -25,7 +32,7 @@
 <p>
 <h2>Step 1: select a topic</h2>
 
-<form action="/user/{{user.email}}/fortune_telling/answer/api" method="post">
+<form action="/user/fortune_telling/answer/api" method="post" id="my_form">
   
     <label for="question"> Choose a question:</label>
     <select id="question" name="question">
@@ -54,6 +61,12 @@
 
 <p>
 <h2>Step 3: see your fortune</h2>
+
+<div id="result">
+    <div id = "result_clean_after_resubmit">
+
+    </div>
+</div>
 
 
 </p>
