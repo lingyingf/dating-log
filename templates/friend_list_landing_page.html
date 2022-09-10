@@ -8,6 +8,38 @@
 <h1>Welcome to {{ user.user_name }}'s friend list </h1>
 
 
+<!-- show list of friends -->
+<div>
+    <form action="/user/{{user.email}}/friend_list_landing_page/delete_friend" method="post">
+        {% for friend in list_of_friends_objects  %}
+        <p>
+            <div>
+            <input type="checkbox" id="{{friend.friend_edit_id}}" name="friend_selected" value="{{friend.friend_edit_id}}">
+            <label for="{{friend.friend_edit_id}}">
+                {{ friend.friend_username}} </div>
+                <div>Email: {{ friend.friend_email}} </div>
+            </label>
+        </p>
+        {% endfor %}
+        
+        <button type="submit"> Delete seleted friends </button>
+        
+    </form>
 
+
+
+
+<!-- create new friend section -->
+
+    <form action="/user/{{user.email}}/friend_list_landing_page/add_new_friend">
+        <button type="submit"> Add a new friend </button>
+    </form>
+    
+<!-- go back section -->
+    <form action="/user/{{user.email}}/discussion_forum">
+        <input type="submit" value="Go back to my discussion forum page">
+    </form>
+
+</div>
 
 {% endblock %}

@@ -5,7 +5,7 @@ from ctypes import create_unicode_buffer
 import email
 import json
 from flask import (Flask, jsonify, render_template, request, flash, session, redirect)
-from model import connect_to_db, db, User, Log
+from model import Friend, connect_to_db, db, User, Log, Comment
 import crud
 import cloudinary.uploader
 import os
@@ -157,6 +157,7 @@ def log_date_info():
     key_takeaway = request.form.get("key_takeaway")
     description = request.form.get("description")
     contact_info = request.form.get("contact_info")
+    sharing = request.form.get("sharing")
     picture_from_post = request.files["picture"]
 
     dictionary_picture_result = cloudinary.uploader.upload(
@@ -167,7 +168,7 @@ def log_date_info():
 
     picture = dictionary_picture_result["secure_url"]
    
-    new_log = crud.insert_new_log(user_id, first_name_dated, last_name_dated, date_of_the_date, city_met, overall_rating, app_met, key_takeaway, description, contact_info, picture)
+    new_log = crud.insert_new_log(user_id, first_name_dated, last_name_dated, date_of_the_date, city_met, overall_rating, app_met, key_takeaway, description, contact_info, picture, sharing)
     
     db.session.add(new_log)
     db.session.commit()
@@ -181,8 +182,15 @@ def show_log_detail(log_id):
     """show the created log details"""
 
     log_object = Log.query.filter_by(log_id=log_id).first()
+    
+    user_email = session["user_email"]
 
-    return render_template("created_log_detail_page.html", log_object = log_object)
+    # in the discussion form, show the comment section
+    list_of_comments_obj = Comment.query.filter_by(log_id=log_id).all()
+
+    print(list_of_comments_obj)
+
+    return render_template("created_log_detail_page.html", log_object = log_object, user_email= user_email, list_of_comments_obj = list_of_comments_obj)
 
 
 @app.route("/user/logs/delete/<log_id>")
@@ -379,7 +387,21 @@ def show_landing_page_discussion_forum(user_email):
 
     user = crud.get_user_by_email(user_email)
 
-    return render_template("landing_page_discussion_forum.html", user = user)
+    # show list of friends
+    # in those friedns log, find those shared posts
+
+    list_of_frineds_obj_who_added_you = Friend.query.filter(Friend.friend_email == user_email).all()
+    
+    list_of_shared_logs_obj_aggregate= []
+
+    for friend_obj in list_of_frineds_obj_who_added_you:
+        user_id = friend_obj.user_ref.user_id
+        list_of_shared_logs_obj = Log.query.filter(Log.user_id == user_id, Log.sharing == "Yes").all()
+
+        for logs in list_of_shared_logs_obj:
+            list_of_shared_logs_obj_aggregate.append(logs)
+    
+    return render_template("landing_page_discussion_forum.html", user = user, list_of_shared_logs_obj_aggregate = list_of_shared_logs_obj_aggregate )
 
          
 @app.route("/user/<user_email>/friend_list_landing_page")
@@ -388,8 +410,142 @@ def show_friend_list(user_email):
 
     user = crud.get_user_by_email(user_email)
 
-    return render_template("friend_list_landing_page.html", user = user)
+    list_of_friends_objects = Friend.query.filter(Friend.user_email == user.email).all()
 
+    return render_template("friend_list_landing_page.html", user = user, list_of_friends_objects = list_of_friends_objects)
+
+
+@app.route("/user/<user_email>/friend_list_landing_page/add_new_friend")
+def create_new_friend(user_email):
+    """create a template for the users to add new friend"""
+
+    user = crud.get_user_by_email(user_email)
+
+    return render_template("add_new_friend.html", user = user)
+
+
+@app.route("/user/<user_email>/friend_list_landing_page/add_new_friend/data", methods = ["POST"])
+def add_new_friend_and_check(user_email):
+    """after user submit new friend email, need to check if the frined is registerd yet"""
+    
+    friend_email = request.form.get("friend_email")
+
+    user = crud.get_user_by_email(user_email)
+    friend = crud.get_user_by_email(friend_email)
+
+    # if the friends email is not in the database, we need to flask the message
+    current_email_list = []
+    for n in User.query.all():
+        current_email_list.append(n.email)
+
+    current_friend_email_list = []
+    for current_friend in Friend.query.filter(Friend.user_email == user_email).all():
+        current_friend_email_list.append(current_friend.friend_email)
+
+
+    # if condition for diff scenario
+    if friend_email not in current_email_list:
+        flash('This email is not registered yet!')
+        return redirect(f"/user/{user_email}/friend_list_landing_page/add_new_friend")
+    
+    elif friend_email == user_email:
+        flash('This friend is yourself')
+        return redirect(f"/user/{user_email}/friend_list_landing_page/add_new_friend")
+    
+    elif friend_email in current_friend_email_list:
+        flash('This friend is already in the list')
+        return redirect(f"/user/{user_email}/friend_list_landing_page/add_new_friend")
+
+    else:
+        new_friend = crud.insert_new_friend(user.email, friend_email, friend.user_name )
+
+        db.session.add(new_friend)
+        db.session.commit()
+
+        return redirect(f"/user/{user_email}/friend_list_landing_page")
+
+
+@app.route("/user/<user_email>/friend_list_landing_page/delete_friend", methods = ["POST"])
+def delete_friends(user_email):
+    """delete friends """
+
+    friend_selected_list = request.form.getlist("friend_selected")
+    
+    for friend_edit_id in friend_selected_list:
+        delete_item = Friend.query.filter(Friend.friend_edit_id == friend_edit_id).first()  
+        db.session.delete(delete_item)
+        db.session.commit()
+
+    return redirect(f"/user/{user_email}/friend_list_landing_page")
+
+
+# sorting api
+@app.route("/user/sorting/user_email/discussion_form/api", methods = ["POST"] )
+def get_user_logs_discussion_form_in_api():
+    """fetch the sorting info and pass it throgh api so that sort.jsx can take it in discussion form"""
+
+    sorting_object = request.json.get("sorting_object")
+    sorting_rule = request.json.get("sorting_rule")
+
+    user_email = session.get("user_email")
+    
+    user = crud.get_user_by_email(user_email)
+    
+    # get list of friends
+    list_of_frineds_obj_who_added_you = Friend.query.filter(Friend.friend_email == user_email).all()
+    
+    list_of_shared_logs_obj_aggregate= []
+
+    for friend_obj in list_of_frineds_obj_who_added_you:
+        user_id = friend_obj.user_ref.user_id
+        list_of_shared_logs_obj = Log.query.filter(Log.user_id == user_id, Log.sharing == "Yes").all()
+
+        for logs in list_of_shared_logs_obj:
+            list_of_shared_logs_obj_aggregate.append(logs)
+
+    # sorting scenario
+    if sorting_rule == "High_to_low":
+        sorted_list_objects = sorted(list_of_shared_logs_obj_aggregate, key=attrgetter(sorting_object), reverse= True)
+    elif sorting_rule == "Low_to_high":
+        sorted_list_objects = sorted(list_of_shared_logs_obj_aggregate, key=attrgetter(sorting_object), reverse= False)
+        
+    logs_dictionary = {}
+    order_number = 0
+    for list_obj in sorted_list_objects:
+        logs_dictionary[order_number] = {}
+        logs_dictionary[order_number]["creator"] = list_obj.user_ref.user_name
+        logs_dictionary[order_number]["log_id"] = list_obj.log_id
+        logs_dictionary[order_number]["name"] = list_obj.first_name_dated + " "+ list_obj.last_name_dated
+        logs_dictionary[order_number]["overall_rating"] = list_obj.overall_rating
+        logs_dictionary[order_number]["picture"] = list_obj.picture
+        order_number += 1
+
+    return jsonify(logs_dictionary)
+
+
+
+@app.route("/user/<user_email>/discussion_forum/<log_id>/new_comment")
+def create_new_comment(user_email, log_id):
+    """create new comment for the user"""
+
+    user = crud.get_user_by_email(user_email)
+
+    return render_template("add_new_comment.html", user = user, log_id = log_id)
+
+
+
+@app.route("/comment_info/<user_email>/<log_id>", methods = ["POST"] )
+def capture_comment(user_email, log_id):
+    """capture comment and add it into the database"""
+
+    comment = request.form.get("comment")
+
+    new_comment = crud.insert_new_comment(user_email, log_id, comment)
+
+    db.session.add(new_comment)
+    db.session.commit()
+
+    return redirect(f"/user/logs/{log_id}")
 
 
 if __name__ == "__main__":

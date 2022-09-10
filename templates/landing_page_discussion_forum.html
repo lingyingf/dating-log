@@ -27,17 +27,70 @@
 <h1>Welcome to {{ user.user_name }}'s discussion forum </h1>
 
 <!-- friend list -->
+<p>
 <div>
+    <h4> Your friends can see the posts you shared </h4>
     <form action="/user/{{user.email}}/friend_list_landing_page">
         <button type="submit"> Manage friend list </button>
     </form>
 </div>
+</p>
+
+<!-- filter  -->
+<p>
+    <h2>Dating log sorting </h2>
+    <form action= "/user/sorting/user_email/discussion_form/api" method ="post">
+        <p>
+            <label for="sorting_object">Sort by:</label>
+            <select name="sorting_object" id="sorting_object">
+                <option value="overall_rating">Rating score</option>
+                <option value="date_of_the_date">Date</option>
+                <option value="first_name_dated">First name</option>
+            </select>
+        </p>
+        <p>
+            <label for="sorting_rule">Sort rule:</label>
+            <select name="sorting_rule" id="sorting_rule">
+                <option value="High_to_low">High to low</option>
+                <option value="Low_to_high">Low to High</option>
+            </select>
+        </p>
+        <input type="submit" value="Sort" id="sort">
+    </form>
+</p>
+
+
 
 
 <!-- list of the topics -->
+<p>
+<div>
+    <h4> Shared posts </h4>
+
+    <div id="historical_logs">
+    <div id="historical_logs_clean_after_sorting">
+
+    {% for log in list_of_shared_logs_obj_aggregate  %}
+    <p>
+        <div> 
+            <a href="/user/logs/{{ log.log_id }}">
+                {{ log.log_id }}
+            </a> 
+        </div>
+        <div> Post Creator: {{ log.user_ref.user_name}} </div>
+        <div> Name: {{ log.first_name_dated}} {{ log.last_name_dated}} </div>
+        <div> Overall rating: {{ log.overall_rating}} </div>
+        <div> Picture: <img src="{{ log.picture}}"> </div>
+    </p>
+    {% endfor %}
+
+    </div>
+    </div>
+
+</div>
+</p>
 
 
-
-
+<script src="/static/discussion_form_sort.js"></script>
 
 {% endblock %}
