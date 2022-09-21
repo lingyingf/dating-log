@@ -6,41 +6,49 @@
 {% block body %}
 
 <!-- top bar  -->
-<div> 
-  <a href="/user/{{user.email}}">
-      Dating log
-  </a> 
+<nav class="navbar navbar-expand-lg bg-light sticky-top ">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="/">Dating Romance</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="/user/{{user.email}}">Dating log</a>
+              <a class="nav-link" href="/user/{{user.email}}/analysis"> Market analysis</a>
+              <a class="nav-link" href="/user/{{user.email}}/fortune_telling">Fortune telling</a>
+              <a class="nav-link" href="/user/{{user.email}}/discussion_forum">Discussion forum</a>
+          </div>
+      </div>
+  </div>
+</nav>
 
-  <a href="/user/{{user.email}}/analysis">
-      Analysis
-  </a> 
-
-  <a href="/user/{{user.email}}/fortune_telling">
-      Fortune telling
-  </a> 
-
-  <a href="/user/{{user.email}}/discussion_forum">
-      Discussion forum
-  </a> 
-</div>
 
 
-<h1>Welcome to {{ user.user_name }}'s dating analysis board </h1>
+<h1>Put {{ user.user_name }}'s dating experience into statistic </h1>
+
+<p>
+  <div class = "row">
+  <div class = "col" >
+    <img src="/static/Analysis.jpg" class="img-fluid" id="top_img">
+  </div>
+  </div>
+</p>
 
 <!-- chart 1 by app -->
 <div>
-  <h2> chart by app </h2>
+  <h2> By app </h2>
   <canvas id="chart_by_app"></canvas>
 
 </div>
 
 <!-- chart 2 by region -->
+<p>
 <div>
-  <h2> chart by region </h2>
+  <h2> By region </h2>
   <canvas id="chart_by_region"></canvas>
-
 </div>
-
+</p>
 
 
 

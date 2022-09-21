@@ -6,69 +6,98 @@
 {% block body %}
 
 <!-- top bar  -->
-<div> 
-    <a href="/user/{{user.email}}">
-        Dating log
-    </a> 
+<nav class="navbar navbar-expand-lg bg-light sticky-top ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Dating Romance</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/user/{{user.email}}">Dating log</a>
+                <a class="nav-link" href="/user/{{user.email}}/analysis"> Market analysis</a>
+                <a class="nav-link" href="/user/{{user.email}}/fortune_telling">Fortune telling</a>
+                <a class="nav-link" href="/user/{{user.email}}/discussion_forum">Discussion forum</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    <a href="/user/{{user.email}}/analysis">
-        Analysis
-    </a> 
 
-    <a href="/user/{{user.email}}/fortune_telling">
-        Fortune telling
-    </a> 
+<h1>Take a peek into {{ user.user_name }}'s fortune </h1>
 
-    <a href="/user/{{user.email}}/discussion_forum">
-        Discussion forum
-    </a> 
-</div>
 
-<h1>Welcome to {{ user.user_name }}'s fortune telling </h1>
+<p>
+    <div class = "row">
+    <div class = "col" >
+      <img src="/static/tarot.jpg" class="img-fluid" id="top_img">
+    </div>
+    </div>
+</p>
+
 
 <!-- list of the topics -->
 
 
 <p>
+<div class = "row">
 <h2>Step 1: select a topic</h2>
+<br>
+<br>
+<br>
 
 <form action="/user/fortune_telling/answer/api" method="post" id="my_form">
-  
-    <label for="question"> Choose a question:</label>
-    <select id="question" name="question">
+    <div class="input-group mb-3">
+        <label class="input-group-text" for="question">Choose a question</label>
+        <select name="question" class="form-select" id="question"> 
+    <!-- <label for="question"> Choose a question:</label>
+    <select id="question" name="question"> -->
         <option value="when_meet">When will I meet the right person? </option>
         <option value="fit">Is this person a good fit?</option>
         <option value="like_me">Does this person like me?</option>
         <option value="call_me">Will the person call me again?</option>
         <option value="get_back">Will we get back together?</option>
     </select>
+    </div>
+    <br>
+</div>
 </p>
 
 
 <p>
-<h2>Step 2: submit your question</h2>
+    <div class = "row">
+    <div id="greybg">
+    <br>
+    <h2>Step 2: submit your question</h2>
+        
+    <h10>Please elaborate your questions in the mind. <br>If your question is related to specific person, 
+        please make sure you specify his/her/their name. </h10>
     
-<h10>Please elaborate your questions in the mind. If your question is related to specific person, 
-    please make sure you specify his/her/their name. </h10>
-    
+    <br>
+    <br>
     <p>
-        <input type="submit" id="question_submit">
+        <input type="submit" id="question_submit" class="btn btn-light">
     </p> 
 
-</form>
+    </form>
+    </div>
+    </div>
 </p>
 
+<br>
 
 <p>
+<div class = "row">
 <h2>Step 3: see your fortune</h2>
-
-<div id="result">
-    <div id = "result_clean_after_resubmit">
-
+<br>
+<br>
+<div id="result" class = "nav-link">
+    <div id = "result_clean_after_resubmit" class = "nav-link">
     </div>
 </div>
-
-
+<br>
+<br>
+</div>
 </p>
 
 

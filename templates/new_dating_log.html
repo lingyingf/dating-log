@@ -4,64 +4,116 @@
 
 <h1>Tell us what's new in your date!</h1>
 
+<p>
+    <div class = "row">
+    <div class = "col" >
+      <img src="/static/journal.jpg" class="img-fluid" id="top_img">
+    </div>
+    </div>
+</p>
+
+<p> * is mandatory input</p>
+
 <!-- list of info -->
 <form action="/date_info" method="POST" enctype="multipart/form-data">
     <h2> Your date info </h2>
-        <p> * is mandatory input</p>
+        
         <p>
-            First name* <input type="text" name="first_name_dated">
+            <div class="input-group">
+                <span class="input-group-text">First name*</span>
+                <input type="text" name="first_name_dated" class="form-control">
+            </div>
         </p>
         <p>
-            Last name <input type="text" name="last_name_dated">
+            <div class="input-group">
+                <span class="input-group-text">Last name</span>
+                <input type="text" name="last_name_dated" class="form-control">
+            </div>
         </p>
         <p>
-            Dating date <input type="datetime-local" name="date_of_the_date">
+            <div class="input-group">
+                <span class="input-group-text">Dating date *</span>
+                <input type="datetime-local" name="date_of_the_date" class="form-control">
+            </div>
+            <!-- Dating date <input type="datetime-local" name="date_of_the_date"> -->
         </p>
         <p>
-            City you met <input type="text" name="city_met">
+            <div class="input-group">
+                <span class="input-group-text">City you met</span>
+                <input type="text" name="city_met" class="form-control">
+            </div>
+            <!-- /City you met <input type="text" name="city_met"> -->
         </p>
         <p>
-            App you met <input type="text" name="app_met">
+            <div class="input-group">
+                <span class="input-group-text">App you met</span>
+                <input type="text" name="app_met" class="form-control">
+            </div>
+            <!-- App you met <input type="text" name="app_met"> -->
         </p>
 <!-- contact info -->
         <p>
-            Contact info <input type="text" name="contact_info">
+            <div class="input-group">
+                <span class="input-group-text">Contact info </span>
+                <input type="text" name="contact_info" class="form-control">
+            </div>
+            <!-- Contact info <input type="text" name="contact_info"> -->
         </p>
 
     <h2> Tell us your experience </h2>
         <p>
-            <label for="rating">How would you rate the date*:</label>
-            <select name="overall_rating" id="rating">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="rating">How would you rate the date*</label>
+                <select name="overall_rating" class="form-select" id="rating">
+                <!-- <label for="rating">How would you rate the date*:</label> -->
+                <!-- <select name="overall_rating" id="rating"> -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
             </select>
+            </div>
         </p>
         <p>
-            key takeaway <input type="text" name="key_takeaway">
+            <div class="input-group">
+                <span class="input-group-text">key takeaway </span>
+                <input type="text" name="key_takeaway" class="form-control">
+            </div>
+            <!-- key takeaway <input type="text" name="key_takeaway"> -->
         </p>
         <p>
-            <label for="details">Details:</label>
-            <textarea id="details" name="description" rows="4" cols="50"></textarea>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="details">Details</label>
+                <textarea id="details" name="description" rows="4" cols="50" class="form-control"></textarea>
+            </div>
+            <!-- <label for="details">Details:</label>
+            <textarea id="details" name="description" rows="4" cols="50"></textarea> -->
         </p>
 
 <!-- upload image -->
         <p>
-           Upload picture*
-            <input type="file" name="picture"> 
+            <div class="input-group">
+                <span class="input-group-text">Upload picture*</span>
+                <input type="file" name="picture" class="form-control">
+            </div>
+            <!-- Upload picture*
+            <input type="file" name="picture">  -->
         </p>
         <p>
-            <label for="sharing">Share this log with your friends*:</label>
-            <select name="sharing" id="sharing">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="sharing">Share this log with your friends*</label>
+                <select name="sharing" class="form-select" id="sharing">
+            <!-- <label for="sharing">Share this log with your friends*:</label>
+            <select name="sharing" id="sharing"> -->
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
             </select>
+            </div>
         </p>
 
 <p>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" class="btn btn-light">
 </p>
 
 </form>

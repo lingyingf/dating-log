@@ -5,7 +5,15 @@
 
 {% block body %}
 
-<h1>Welcome to {{ user.user_name }}'s friend list </h1>
+<h1> {{ user.user_name }}'s friend list </h1>
+
+<p>
+    <div class = "row">
+    <div class = "col" >
+      <img src="/static/Homepage.jpg" class="img-fluid" id="top_img">
+    </div>
+    </div>
+</p>
 
 
 <!-- show list of friends -->
@@ -21,25 +29,32 @@
             </label>
         </p>
         {% endfor %}
-        
-        <button type="submit"> Delete seleted friends </button>
-        
+    <div class="row">  
+        <div class="col">  
+            <button type="submit" class="btn btn-light"> Delete seleted friends </button>
+        </div>
     </form>
 
 
 
 
 <!-- create new friend section -->
-
+    <div class="col">
     <form action="/user/{{user.email}}/friend_list_landing_page/add_new_friend">
-        <button type="submit"> Add a new friend </button>
+        <button type="submit" class="btn btn-light"> Add a new friend </button>
     </form>
-    
+    </div>
 <!-- go back section -->
+    <div class="col">
     <form action="/user/{{user.email}}/discussion_forum">
-        <input type="submit" value="Go back to my discussion forum page">
+        <input type="submit" value="Go back to my discussion forum page" class="btn btn-light">
     </form>
+    </div>
 
+<br>
+<br>
+<br>
+</div>
 </div>
 
 {% endblock %}

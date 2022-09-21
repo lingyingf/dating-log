@@ -30,16 +30,30 @@ function Sort(result) {
     for (let number_order in result) {
     
     document.querySelector('#historical_logs').insertAdjacentHTML('beforeend', `
-        <div id = "historical_logs_clean_after_sorting">
-            <div> 
-                <a href= "/user/logs/${result[number_order]["log_id"]}">
-                    ${ result[number_order]["log_id"] }
-                </a> 
+        <p>
+            <div id = "historical_logs_clean_after_sorting">
+                <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                <div class="col-md-4">
+                    <img src=${ result[number_order]["picture"]} class="img-fluid rounded-start profile_pic" >
+                </div>
+                <div class="col-md-8">
+                <div class="card-body">
+                    <a href="/user/logs/${result[number_order]["log_id"]}">
+                        <h5 class="card-title"> ${ result[number_order]["name"] }</h5>
+                    </a> 
+                <p class="card-text">
+                    Overall rating: ${ result[number_order]["overall_rating"] } <br>
+                    Key takeaway:  ${ result[number_order]["key_takeaway"] }
+                </p>
+                <p class="card-text"><small class="text-muted"> We met on ${ result[number_order]["date_of_the_date"] } </small></p>
+                </div>
             </div>
-            <div> Name: ${ result[number_order]["name"] } </div>
-            <div> Overall rating: ${ result[number_order]["overall_rating"] } </div>
-            <div> Picture: <img src= ${ result[number_order]["picture"]} /> </div>
-        </div>`)
+            </div>
+        </div>
+
+        </p>
+            `)
      }
 
 

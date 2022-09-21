@@ -6,60 +6,78 @@
 {% block body %}
 
 <!-- top bar  -->
-<div> 
-    <a href="/user/{{user.email}}">
-        Dating log
-    </a> 
+<nav class="navbar navbar-expand-lg bg-light sticky-top ">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Dating Romance</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link active" aria-current="page" href="/user/{{user.email}}">Dating log</a>
+                <a class="nav-link" href="/user/{{user.email}}/analysis"> Market analysis</a>
+                <a class="nav-link" href="/user/{{user.email}}/fortune_telling">Fortune telling</a>
+                <a class="nav-link" href="/user/{{user.email}}/discussion_forum">Discussion forum</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-    <a href="/user/{{user.email}}/analysis">
-        Analysis
-    </a> 
 
-    <a href="/user/{{user.email}}/fortune_telling">
-        Fortune telling
-    </a> 
+<h1>{{ user.user_name }}'s friends dating log: you're not alone on this journey </h1>
 
-    <a href="/user/{{user.email}}/discussion_forum">
-        Discussion forum
-    </a> 
-</div>
 
-<h1>Welcome to {{ user.user_name }}'s discussion forum </h1>
+<p>
+    <div class = "row">
+    <div class = "col" >
+      <img src="/static/Discussion.jpg" class="img-fluid" id="top_img">
+    </div>
+    </div>
+</p>
 
 <!-- friend list -->
 <p>
+<div class = "row">
+<div class = "col" >
 <div>
-    <h4> Your friends can see the posts you shared </h4>
+    <h2>Share access management </h2>
+    <h10> Your friends in the list can see the posts you shared </h10>
+    <br>
+    <br>
     <form action="/user/{{user.email}}/friend_list_landing_page">
-        <button type="submit"> Manage friend list </button>
+        <button type="submit"class="btn btn-light"> Manage friend list </button>
     </form>
 </div>
-</p>
+</div>
 
 <!-- filter  -->
-<p>
+    <div class = "col" >
     <h2>Dating log sorting </h2>
     <form action= "/user/sorting/user_email/discussion_form/api" method ="post">
         <p>
-            <label for="sorting_object">Sort by:</label>
-            <select name="sorting_object" id="sorting_object">
-                <option value="overall_rating">Rating score</option>
-                <option value="date_of_the_date">Date</option>
-                <option value="first_name_dated">First name</option>
-            </select>
+            <div class="input-group mb-3">
+                <label for="sorting_object">Sort by: &nbsp&nbsp</label>
+                <select name="sorting_object" id="sorting_object" class="form-select">
+                    <option value="overall_rating">Rating score</option>
+                    <option value="date_of_the_date">Date</option>
+                    <option value="first_name_dated">First name</option>
+                </select>
+            </div>
         </p>
         <p>
-            <label for="sorting_rule">Sort rule:</label>
-            <select name="sorting_rule" id="sorting_rule">
-                <option value="High_to_low">High to low</option>
-                <option value="Low_to_high">Low to High</option>
-            </select>
+            <div class="input-group mb-3">
+                <label for="sorting_rule">Sort rule: &nbsp</label>
+                <select name="sorting_rule" id="sorting_rule" class="form-select">
+                    <option value="High_to_low">High to low</option>
+                    <option value="Low_to_high">Low to High</option>
+                </select>
+            </div>
         </p>
-        <input type="submit" value="Sort" id="sort">
+        <input type="submit" value="Sort" id="sort" class="btn btn-light">
     </form>
+    </div>
+</div>
 </p>
-
-
 
 
 <!-- list of the topics -->
@@ -71,17 +89,36 @@
     <div id="historical_logs_clean_after_sorting">
 
     {% for log in list_of_shared_logs_obj_aggregate  %}
-    <p>
-        <div> 
-            <a href="/user/logs/{{ log.log_id }}">
-                {{ log.log_id }}
-            </a> 
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+        <div class="col-md-4">
+            <img src="{{ log.picture}}" class="img-fluid rounded-start profile_pic" >
         </div>
-        <div> Post Creator: {{ log.user_ref.user_name}} </div>
-        <div> Name: {{ log.first_name_dated}} {{ log.last_name_dated}} </div>
-        <div> Overall rating: {{ log.overall_rating}} </div>
-        <div> Picture: <img src="{{ log.picture}}"> </div>
-    </p>
+        <div class="col-md-8">
+            <div class="card-body">
+                <a href="/user/logs/{{ log.log_id }}">
+                    <h5 class="card-title"> {{ log.first_name_dated}} {{ log.last_name_dated}}</h5>
+                </a> 
+            <p class="card-text">
+                Overall rating: {{ log.overall_rating}} <br>
+                Key takeaway:  {{ log.key_takeaway}}
+            </p>
+            <p class="card-text"><small class="text-muted"> We met on {{ log.date_of_the_date}} </small></p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!-- <div class="row card">
+        <br>
+        <div> <img src="{{ log.picture}}" class="col profile_pic"> </div>
+        <div class="col">
+                <a href="/user/logs/{{ log.log_id }}">
+                    <h5>{{ log.first_name_dated}} {{ log.last_name_dated}}</h5>
+                </a> 
+                <p> Post creator: {{ log.user_ref.user_name}} <br>
+                Overall rating: {{ log.overall_rating}}</p>
+        </div>
+    </div> --> 
     {% endfor %}
 
     </div>

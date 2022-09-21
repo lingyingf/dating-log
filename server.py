@@ -130,6 +130,8 @@ def get_user_logs_in_api():
         logs_dictionary[order_number]["name"] = list_obj.first_name_dated + " "+ list_obj.last_name_dated
         logs_dictionary[order_number]["overall_rating"] = list_obj.overall_rating
         logs_dictionary[order_number]["picture"] = list_obj.picture
+        logs_dictionary[order_number]["key_takeaway"] = list_obj.key_takeaway
+        logs_dictionary[order_number]["date_of_the_date"] = list_obj.date_of_the_date
         order_number += 1
 
     return jsonify(logs_dictionary)
@@ -518,6 +520,8 @@ def get_user_logs_discussion_form_in_api():
         logs_dictionary[order_number]["name"] = list_obj.first_name_dated + " "+ list_obj.last_name_dated
         logs_dictionary[order_number]["overall_rating"] = list_obj.overall_rating
         logs_dictionary[order_number]["picture"] = list_obj.picture
+        logs_dictionary[order_number]["key_takeaway"] = list_obj.key_takeaway
+        logs_dictionary[order_number]["date_of_the_date"] = list_obj.date_of_the_date       
         order_number += 1
 
     return jsonify(logs_dictionary)
