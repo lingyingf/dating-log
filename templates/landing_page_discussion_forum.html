@@ -100,6 +100,7 @@
                     <h5 class="card-title"> {{ log.first_name_dated}} {{ log.last_name_dated}}</h5>
                 </a> 
             <p class="card-text">
+                Post creator: {{ log.user_ref.user_name}} <br>
                 Overall rating: {{ log.overall_rating}} <br>
                 Key takeaway:  {{ log.key_takeaway}}
             </p>
